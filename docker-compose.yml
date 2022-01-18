@@ -1,9 +1,27 @@
 version: '3.8'
+
+volumes:
+  datafiles:
+
 services:
-  php-apache-environment:
-    container_name: php-apache
-    image: php:8.0-apache
-    volumes:
-      - ./php/src:/var/www/html/
+  website:
+    container_name: erms-website
+    build: 
+      context: .
+      dockerfile: dockerfile
     ports:
-      - 8000:80
+      - 8080:80
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql:8.0.0
+    container_name: mysql8
+    environment:
+      - MYSQL_ROOT_PASSWORD=supersecret
+      - MYSQL_TCP_PORT=3306
+    volumes:
+      - datafiles:/var/lib/mysql
+    restart: always
+
+    
+    
