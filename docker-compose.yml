@@ -4,24 +4,31 @@ volumes:
   datafiles:
 
 services:
-  website:
-    container_name: erms-website
-    build: 
-      context: .
-      dockerfile: dockerfile
-    ports:
-      - 8080:80
-    depends_on:
-      - mysql
   mysql:
     image: mysql:8.0.0
     container_name: mysql8
     environment:
-      - MYSQL_ROOT_PASSWORD=supersecret
+      - MYSQL_ROOT_PASSWORD=secret
       - MYSQL_TCP_PORT=3306
+      - MYSQL_DATABASE=ermsdb
     volumes:
       - datafiles:/var/lib/mysql
+      - ./sql_scripts:/docker-entrypoint-initdb.d
     restart: always
 
-    
-    
+  website:
+    container_name: php73
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - MYSQL_DBHOST=mysql
+      - MYSQL_DBPORT=3306
+      - MYSQL_DBUSER=root
+      - MYSQL_DBPASS=secret
+      - MYSQL_DBNAME=ermsdb
+    ports:
+      - 8080:80
+      - 8083:443
+    depends_on:
+      - mysql

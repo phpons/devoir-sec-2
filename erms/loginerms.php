@@ -2,7 +2,6 @@
 session_start();
 error_reporting(0);
 include('includes/dbconnection.php');
-
 if(isset($_POST['login']))
   {
     $Email=$_POST['Email'];
@@ -17,11 +16,11 @@ if(isset($_POST['login']))
       $msg="Invalid Details.";
     }
   }
-  ?>
+?>
 
 
 
-<!DOCTYPE html>
+<!-- <!DOCTYPE html> -->
 <html lang="en">
 
 <head>
